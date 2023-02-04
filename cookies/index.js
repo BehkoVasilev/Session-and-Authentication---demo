@@ -1,10 +1,18 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
+
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(expressSession({
+    secret: 'keybort cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: false
+}))
 
 app.get('/', (req, res) => {
     res.send(`
@@ -40,6 +48,8 @@ app.post('/login', (req, res) => {
         };
 
         res.cookie('auth', JSON.stringify(authData));
+        req.session.username = 'Test1';
+        req.session.privetInfo = "some privet info";
         return res.redirect('/')
     };
     res.status(401).end()
@@ -48,12 +58,12 @@ app.post('/login', (req, res) => {
 app.get('/profile', (req, res) => {
     const authData = req.cookies['auth'];
 
-    if(!authData) {
+    if (!authData) {
         return res.redirect('/login');
     }
 
-    const {username} = JSON.parse(authData);
-
+    const { username } = JSON.parse(authData);
+    console.log(req.session);
     console.log(username);
 
     res.send(`<h2> Hello - ${username}</h2>`)
