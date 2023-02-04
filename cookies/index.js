@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     res.send(`
         <h1>Hello Cookie</h1>
         <ul>
-            <li><a href="/profil">Profil</a></li>
+            <li><a href="/profile">Profile</a></li>
             <li><a href="/login">Login</a></li>
         </ul>`
     );
@@ -28,7 +28,7 @@ app.get("/login", (req, res) => {
             <input type="submit" value="login" >
         </form>`
     );
-})
+});
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
@@ -40,8 +40,24 @@ app.post('/login', (req, res) => {
         };
 
         res.cookie('auth', JSON.stringify(authData));
-        res.redirect('/')
-    }
-})
+        return res.redirect('/')
+    };
+    res.status(401).end()
+});
 
-app.listen(5000, () => console.log("Server is running on port 5000"));
+app.get('/profile', (req, res) => {
+    const authData = req.cookies['auth'];
+
+    if(!authData) {
+        return res.redirect('/login');
+    }
+
+    const {username} = JSON.parse(authData);
+
+    console.log(username);
+
+    res.send(`<h2> Hello - ${username}</h2>`)
+});
+
+
+app.listen(5000, () => console.log("Server is running on port 5000..."));
