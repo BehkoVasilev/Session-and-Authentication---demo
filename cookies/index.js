@@ -35,7 +35,7 @@ app.post('/login', (req, res) => {
 
     if (username == 'Ivan' && password == 'peti') {
         const authData = {
-            username: Ivan,
+            username: 'Ivan',
 
         };
 
