@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
             <li><a href="/profile">Profile</a></li>
             <li><a href="/register">Register</a></li>
             <li><a href="/login">Login</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>`
     );
 });
@@ -59,8 +60,6 @@ app.post('/login', async (req, res) => {
     } catch {
         res.status(401).end();
     }
-
-    res.status(401).end()
 });
 
 app.get('/profile', (req, res) => {
@@ -98,6 +97,11 @@ app.post('/register', async (req, res) => {
     await dataService.registerUser(username, password);
 
     res.redirect('/login');
+});
+
+app.get('/logout', (req, res) =>{
+    res.clearCookie('auth');
+    res.redirect('/');
 });
 
 
