@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
-
+const dataService = require('./dataService');
 
 const app = express();
 
@@ -35,27 +35,31 @@ app.get("/login", (req, res) => {
             <input type="text" id="username" name="username">
     
             <label for="password">Password</label>
-            <input type="password" id="repassword" name="password">
+            <input type="password" id="password" name="password">
 
             <input type="submit" value="login" >
         </form>`
     );
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    if (username == 'Ivan' && password == 'peti') {
+    try {
+        const user = await dataService.loginUser(username, password);
         const authData = {
-            username: 'Ivan',
-
+            username: user.username,
         };
 
         res.cookie('auth', JSON.stringify(authData));
-        req.session.username = 'Test1';
-        req.session.privetInfo = "some privet info";
+        req.session.username = user.username;
+        req.session.privetInfo = user.password;
+
         return res.redirect('/')
-    };
+    } catch {
+        res.status(401).end();
+    }
+
     res.status(401).end()
 });
 
@@ -83,12 +87,19 @@ app.get("/register", (req, res) => {
             <label for="password">Password</label>
             <input type="password" id="password" name="password">
 
-            <label for="password">Repassword</label>
-            <input type="password" id="password" name="password">
-
             <input type="submit" value="register" >
         </form>`
     );
 });
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+
+    await dataService.registerUser(username, password);
+
+    res.redirect('/login');
+});
+
+
 
 app.listen(5000, () => console.log("Server is running on port 5000..."));

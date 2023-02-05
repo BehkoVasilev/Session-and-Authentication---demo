@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "username": "dancho",
+      "password": "$2b$12$gKVylteOYRTUiYspeWMCSeljeoirwPckIFCa2wuhZ0T/F7EyZm/a6"
+    },
+    {
+      "username": "dan",
+      "password": "$2b$12$r31r.7YhFQG3z1RadtfiaeQ5UWxrYgjBOfsdDUf4uyrnvRK6iFZ8q"
+    },
+    {
+      "username": "test1",
+      "password": "$2b$12$RCfPVZc.C3R1WPpylZ1fN.EfDYe5REBpuZH1A9v.7vIWQ2Mzx7qCG"
+    }
+  ]
+}
