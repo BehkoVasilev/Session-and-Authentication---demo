@@ -2,7 +2,7 @@
   "name": "session-and-authentication---demo",
   "version": "1.0.0",
   "description": "",
-  "main": "cookies/index.js",
+  "main": "index.js",
   "dependencies": {
     "abbrev": "^1.1.1",
     "accepts": "^1.3.8",
@@ -93,7 +93,7 @@
     "vary": "^1.1.2"
   },
   "scripts": {
-    "start": "nodemon .cookies/index.js"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",

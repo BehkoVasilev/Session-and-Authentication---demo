@@ -6,7 +6,9 @@ const expressSession = require('express-session');
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+//long-term
 app.use(cookieParser());
+//short-term
 app.use(expressSession({
     secret: 'keybort cat',
     resave: false,
@@ -19,6 +21,7 @@ app.get('/', (req, res) => {
         <h1>Hello Cookie</h1>
         <ul>
             <li><a href="/profile">Profile</a></li>
+            <li><a href="/register">Register</a></li>
             <li><a href="/login">Login</a></li>
         </ul>`
     );
@@ -26,12 +29,13 @@ app.get('/', (req, res) => {
 
 app.get("/login", (req, res) => {
     res.send(`
+        <h1>Sing in</h1>
         <form method="POST">
             <label for="username">Username</label>
             <input type="text" id="username" name="username">
     
             <label for="password">Password</label>
-            <input type="password" id="password" name="password">
+            <input type="password" id="repassword" name="password">
 
             <input type="submit" value="login" >
         </form>`
@@ -69,5 +73,22 @@ app.get('/profile', (req, res) => {
     res.send(`<h2> Hello - ${username}</h2>`)
 });
 
+app.get("/register", (req, res) => {
+    res.send(`
+        <h1>Sing up</h1>
+        <form method="POST">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username">
+    
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+
+            <label for="password">Repassword</label>
+            <input type="password" id="password" name="password">
+
+            <input type="submit" value="register" >
+        </form>`
+    );
+});
 
 app.listen(5000, () => console.log("Server is running on port 5000..."));
