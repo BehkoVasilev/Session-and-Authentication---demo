@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dataService = require('./dataService');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -47,14 +48,17 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const user = await dataService.loginUser(username, password);
-        const authData = {
-            username: user.username,
-        };
+        // const user = await dataService.loginUser(username, password);
+        // const authData = {
+        //     username: user.username,
+        // };
 
-        res.cookie('auth', JSON.stringify(authData));
-        req.session.username = user.username;
-        req.session.privetInfo = user.password;
+        // res.cookie('auth', JSON.stringify(authData));
+        // req.session.username = user.username;
+        // req.session.privetInfo = user.password;
+
+        const token = await dataService.loginUser(username, password);
+        res.cookie('token', token, { httpOnly: true });
 
         return res.redirect('/')
     } catch {
@@ -63,17 +67,31 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-    const authData = req.cookies['auth'];
+    // const authData = req.cookies['auth'];
 
-    if (!authData) {
-        return res.redirect('/login');
+    // if (!authData) {
+    //     return res.status(401).end();
+    // }
+
+    // const { username } = JSON.parse(authData);
+    // console.log(req.session);
+    // console.log(username);
+
+    // res.send(`<h2> Hello - ${username}</h2>`)
+
+    const token = req.cookies['token'];
+
+    if (!token) {
+        return res.status(401).end()
     }
+    try{
+        const decodedToken = jwt.verify(token, "VeryBigSecret");
+        console.log(decodedToken);
 
-    const { username } = JSON.parse(authData);
-    console.log(req.session);
-    console.log(username);
-
-    res.send(`<h2> Hello - ${username}</h2>`)
+        res.send(`<h2> Hello - ${decodedToken.username}</h2>`);
+    }catch(err){
+        res.status(401).end();
+    }
 });
 
 app.get("/register", (req, res) => {
@@ -99,8 +117,8 @@ app.post('/register', async (req, res) => {
     res.redirect('/login');
 });
 
-app.get('/logout', (req, res) =>{
-    res.clearCookie('auth');
+app.get('/logout', (req, res) => {
+    res.clearCookie('token');
     res.redirect('/');
 });
 

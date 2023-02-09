@@ -11,6 +11,10 @@
     {
       "username": "test1",
       "password": "$2b$12$RCfPVZc.C3R1WPpylZ1fN.EfDYe5REBpuZH1A9v.7vIWQ2Mzx7qCG"
+    },
+    {
+      "username": "asd",
+      "password": "$2b$12$wrqcH2GEa2pQxmMUecyxQ.1mWxIz56k5LTVvA0TQNRgO98QhoTCoO"
     }
   ]
 }
