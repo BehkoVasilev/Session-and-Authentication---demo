@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const db = require('./db.json');
 
@@ -38,6 +39,11 @@ exports.loginUser = async (username, password) => {
     if (!isValid){
         throw 'Incorrect username or password';        
     };
-
-    return user
+    const payload = {username: user.username};
+    const secret = "VeryBigSecret";
+    const opsions = {expiresIn: '2h'};
+    const token = jwt.sign(payload, secret, opsions);
+    console.log(token)
+    
+    return token
 }
